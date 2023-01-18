@@ -17,6 +17,8 @@ jobs:
           token: ${{ secrets.TOKEN }}
 
       - name: Install and Build 🔧
+        env:
+          VITE_API_BASE_URL: ${{ secrets.BASE_URL }}
         run: |
           npm ci
           npm run build:ui
