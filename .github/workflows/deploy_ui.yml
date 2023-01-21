@@ -5,6 +5,7 @@ on:
       - main
 permissions:
   contents: write
+
 jobs:
   build-and-deploy:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
@@ -22,6 +23,7 @@ jobs:
         run: |
           npm ci
           npm run build:ui
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
