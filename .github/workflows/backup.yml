@@ -1,4 +1,4 @@
-name: Backup sqlite
+name: [SQLite]Backup
 on:
   push:
     branches:

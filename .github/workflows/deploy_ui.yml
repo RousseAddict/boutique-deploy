@@ -1,4 +1,4 @@
-name: Build and Deploy UI
+name: [UI]Build and Deploy
 on:
   push:
     branches:
@@ -20,6 +20,7 @@ jobs:
       - name: Install and Build 🔧
         env:
           VITE_API_BASE_URL: ${{ secrets.BASE_URL }}
+          VITE_STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
         run: |
           npm ci
           npm run build:ui

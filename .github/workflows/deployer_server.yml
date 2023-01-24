@@ -1,0 +1,30 @@
+name: [Server]Build and Deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tools repo
+          uses: actions/checkout@v3
+          with:
+            repository: ${{ secrets.REPO }}
+            token: ${{ secrets.TOKEN }}
+
+      - name: Setup SSH key
+        run: ssh-keyscan -t rsa ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+
+      - name: Copy files to server
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PATH: ${{ secrets.SSH_PATH }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          echo "${{ env.SSH_USER }}:${{ env.SSH_PASSWORD }}" | chpasswd
+          sshpass -e scp -r * ${{ env.SSH_USER }}@${{ env.SSH_HOST }}:${{ env.SSH_PATH }}
