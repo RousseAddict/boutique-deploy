@@ -59,4 +59,4 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         run: |
           scp -o StrictHostKeyChecking=no -r dist/* ${SSH_USER}@${SSH_HOST}:~/boutique
-          sshpass -p ${DIGITALOCEAN_DROPLET_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 start index.js --name "boutique"'
+          sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 start index.js --name "boutique"'
