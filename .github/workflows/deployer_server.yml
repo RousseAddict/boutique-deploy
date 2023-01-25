@@ -1,18 +1,47 @@
-name: Server - Build and Deploy
+name: Server - Backup + Build and Deploy
 on:
   push:
     branches:
       - main
 
 jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tools repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ secrets.REPO }}
+          token: ${{ secrets.TOKEN }}
+
+      - name: Create backup
+        continue-on-error: true
+        run: |
+          mkdir backup
+          cp vendure.sqlite backup/vendure.sqlite
+          cp vendure.sqlite-shm backup/vendure.sqlite-shm
+          cp vendure.sqlite-wal backup/vendure.sqlite-wal
+
+      - name: Delete branch if exists
+        continue-on-error: true
+        run: |
+          git branch --delete backup
+
+      - name: Commit & Push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: 'backup'
+          create_branch: true
+          push_options: '--force'
+
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout tools repo
-          uses: actions/checkout@v3
-          with:
-            repository: ${{ secrets.REPO }}
-            token: ${{ secrets.TOKEN }}
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ secrets.REPO }}
+          token: ${{ secrets.TOKEN }}
 
       - name: Setup SSH key
         run: ssh-keyscan -t rsa ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
