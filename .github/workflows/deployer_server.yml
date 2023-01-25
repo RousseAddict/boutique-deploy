@@ -1,4 +1,4 @@
-name: [Server]Build and Deploy
+name: Server - Build and Deploy
 on:
   push:
     branches:
