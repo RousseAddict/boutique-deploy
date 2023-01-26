@@ -65,12 +65,12 @@ jobs:
           sshpass -p ${SSH_PASSWORD} scp -o StrictHostKeyChecking=no -r dist/* ${SSH_USER}@${SSH_HOST}:~/boutique
     
       - name: Deploy
-          env:
-            SSH_USER: ${{ secrets.SSH_USER }}
-            SSH_HOST: ${{ secrets.SSH_HOST }}
-            SSH_PATH: ${{ secrets.SSH_PATH }}
-            SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-          run: |
-            sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 delete all' || true
-            sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && npm i --production'
-            sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 start index.js --name "boutique"'
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PATH: ${{ secrets.SSH_PATH }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 delete all' || true
+          sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && npm i --production'
+          sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 start index.js --name "boutique"'
