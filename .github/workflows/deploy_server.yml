@@ -19,6 +19,12 @@ jobs:
           sshpass -p ${SSH_PASSWORD} scp -o StrictHostKeyChecking=no -r ${SSH_USER}@${SSH_HOST}:~/boutique/vendure.sqlite-shm vendure.sqlite-shm
           sshpass -p ${SSH_PASSWORD} scp -o StrictHostKeyChecking=no -r ${SSH_USER}@${SSH_HOST}:~/boutique/vendure.sqlite-wal vendure.sqlite-wal
 
+      - name: Checkout tools repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ secrets.REPO }}
+          token: ${{ secrets.TOKEN }}
+
       - name: Delete branch if exists
         continue-on-error: true
         run: |
@@ -56,5 +62,5 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         run: |
           sshpass -p ${SSH_PASSWORD} scp -o StrictHostKeyChecking=no -r dist/* ${SSH_USER}@${SSH_HOST}:~/boutique
-          sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 delete all'
+          sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 delete all' || true
           sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 start index.js --name "boutique"'
