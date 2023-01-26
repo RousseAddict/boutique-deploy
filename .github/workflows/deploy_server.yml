@@ -63,6 +63,6 @@ jobs:
           SSH_PATH: ${{ secrets.SSH_PATH }}
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         run: |
-          sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 delete all' || true
+          sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'echo $APP_ENV && pm2 delete all' || true
           sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && npm ci && npm run build'
           sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 start npm -- start --name "boutique"'
