@@ -8,19 +8,16 @@ jobs:
   backup:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout tools repo
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ secrets.REPO }}
-          token: ${{ secrets.TOKEN }}
-
-      - name: Create backup
-        continue-on-error: true
+      - name: Copy files from server
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PATH: ${{ secrets.SSH_PATH }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         run: |
-          mkdir backup
-          cp vendure.sqlite backup/vendure.sqlite
-          cp vendure.sqlite-shm backup/vendure.sqlite-shm
-          cp vendure.sqlite-wal backup/vendure.sqlite-wal
+          sshpass -p ${SSH_PASSWORD} scp -o StrictHostKeyChecking=no -r ${SSH_USER}@${SSH_HOST}:~/boutique/vendure.sqlite vendure.sqlite
+          sshpass -p ${SSH_PASSWORD} scp -o StrictHostKeyChecking=no -r ${SSH_USER}@${SSH_HOST}:~/boutique/vendure.sqlite-shm vendure.sqlite-shm
+          sshpass -p ${SSH_PASSWORD} scp -o StrictHostKeyChecking=no -r ${SSH_USER}@${SSH_HOST}:~/boutique/vendure.sqlite-wal vendure.sqlite-wal
 
       - name: Delete branch if exists
         continue-on-error: true
@@ -59,6 +56,5 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         run: |
           sshpass -p ${SSH_PASSWORD} scp -o StrictHostKeyChecking=no -r dist/* ${SSH_USER}@${SSH_HOST}:~/boutique
-          sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'echo $PATH && node -v'
           sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 delete all'
           sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'cd boutique && pm2 start index.js --name "boutique"'
