@@ -54,6 +54,7 @@ jobs:
           SSH_PATH: ${{ secrets.SSH_PATH }}
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         run: |
+          rm vendure.sqlite vendure.sqlite-shm vendure.sqlite-wal
           sshpass -p ${SSH_PASSWORD} scp -o StrictHostKeyChecking=no -r * ${SSH_USER}@${SSH_HOST}:~/boutique
     
       - name: Deploy
