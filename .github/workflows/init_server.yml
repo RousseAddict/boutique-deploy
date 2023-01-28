@@ -1,0 +1,18 @@
+name: Server - Initialize
+on:
+  manual:
+    types: [deploy]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Initialize environnement
+      env:
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+        SSH_PATH: ${{ secrets.SSH_PATH }}
+        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        BASE_URL: ${{ secrets.BASE_URL }}
+      run: |
+        sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'export APP_ENV=prod'
+        sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'export VITE_API_BASE_URL=${BASE_URL}'
