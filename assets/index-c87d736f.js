@@ -205,7 +205,7 @@ this in the docs: http://dev.apollodata.com/core/fragments.html#unique-names`):a
   padding: 16px;
   width: 100%;
   box-sizing: border-box;
-`;function f_({children:e}){const t="https://my-boutique.onrender.com",n=new Vk({uri:`${t}/shop-api/`,credentials:"include",cache:new Nk});return E(Gk,{client:n,children:e})}const d_=()=>{var i;const e=rt`
+`;function f_({children:e}){const t="https://a.boutique.whispyy.xyz",n=new Vk({uri:`${t}/shop-api/`,credentials:"include",cache:new Nk});return E(Gk,{client:n,children:e})}const d_=()=>{var i;const e=rt`
     {
       products {
         items {
