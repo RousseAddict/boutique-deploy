@@ -1,7 +1,9 @@
 name: Server - Initialize
 on:
-  manual:
-    types: [deploy]
+  workflow_dispatch:
+    inputs:
+      param1: 
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -14,5 +16,5 @@ jobs:
         SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         BASE_URL: ${{ secrets.BASE_URL }}
       run: |
-        sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'export APP_ENV=prod'
-        sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'export VITE_API_BASE_URL=${BASE_URL}'
+        sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'echo "export APP_ENV=prod" >> ~/.bashrc'
+        sshpass -p ${SSH_PASSWORD} ssh -o StrictHostKeyChecking=no ${SSH_USER}@${SSH_HOST} 'echo "export VITE_API_BASE_URL=${BASE_URL}" >> ~/.bashrc'
