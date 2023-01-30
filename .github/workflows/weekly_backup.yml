@@ -26,8 +26,7 @@ jobs:
 
       - name: Set backup branch name
         run: |
-          now=$(date +"%Y-%m-%d/W%W")
-          export BACKUP_BRANCH_NAME="backup-$now"
+          export BACKUP_BRANCH_NAME="backup-$(date +"%Y-%m-%d/W%W")"
 
       - name: Commit & Push changes
         uses: stefanzweifel/git-auto-commit-action@v4
